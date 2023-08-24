@@ -2,20 +2,20 @@
 
 namespace WebCookingBook.Service
 {
-    public class IApplicationRepository
+    public interface IApplicationRepository
     {
         #region Category
 
-        Task<Category> GetCategoryAsync;
-        Task<IEnumerable<Category>> GetCategoriesAsync;
-        Task<Category> AddCategoryAsync;
+        Task<Category> GetCategoryAsync(int categoryId);
+        Task<IEnumerable<Category>> GetCategoriesAsync();
+        Task<Category> AddCategoryAsync ();
 
         #endregion
         #region Recipe
 
-        Task<Recipe> GetRecipeAsync;
-        Task<IEnumerable<Recipe>> GetRecipesAsync;
-        Task<Recipe> AddRecipeAsync;
+        Task<Recipe> GetRecipeAsync(int recipeId);
+        Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId);
+        Task<Recipe> AddRecipeAsync(int categoryId, int recipeId);
 
         #endregion
     }
