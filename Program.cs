@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebCookingBook.DbContexts;
+using WebCookingBook.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,7 @@ builder.Services.AddDbContext<ApplicationContext>(opt =>
 {
     opt.UseSqlite("Data Source=CookingBookDB.db");
 });
-
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
 var app = builder.Build();
 

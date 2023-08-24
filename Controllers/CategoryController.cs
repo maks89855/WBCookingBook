@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebCookingBook.Models;
+using WebCookingBook.Service;
 
 namespace WebCookingBook.Controllers
 {
@@ -7,9 +9,13 @@ namespace WebCookingBook.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        public CategoryController() 
+        private readonly IApplicationRepository _applicationRepository;
+
+        public CategoryController(IApplicationRepository applicationRepository) 
         {
-        
+            this._applicationRepository = applicationRepository;
         }
+
+
     }
 }
