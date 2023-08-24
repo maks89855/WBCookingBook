@@ -7,6 +7,8 @@ namespace WebCookingBook.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
-
+        public RecipeController()
+        {
+        }
     }
 }

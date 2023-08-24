@@ -1,25 +1,34 @@
+using Microsoft.EntityFrameworkCore;
+using WebCookingBook.DbContexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+//builder.Services.AddRazorPages();
+builder.Services.AddControllers(); // Заменить на MVC
+builder.Services.AddDbContext<ApplicationContext>(opt =>
+{
+    opt.UseSqlite("Data Source=CookingBookDB.db");
+});
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseExceptionHandler("/Error");
+    //// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    //app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
-
+app.UseRouting(); 
+app.UseEndpoints(endpoints => endpoints.MapControllers());
 app.UseAuthorization();
 
-app.MapRazorPages();
+//app.MapRazorPages();
 
 app.Run();

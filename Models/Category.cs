@@ -1,17 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebCookingBook.Models
 {
     public class Category
     {
-
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string NameCategory { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string NameCategory { get; set; } = "Category";
         public ICollection<Recipe> Recipes { get; set; } = new List<Recipe> { };
-        public Category(string nameCategory = "Category")
+        public Category()
         {
-            this.NameCategory = nameCategory;
+            //this.NameCategory = nameCategory;
         }
     }
 }

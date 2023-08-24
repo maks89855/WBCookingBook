@@ -7,5 +7,9 @@ namespace WebCookingBook.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
+        public CategoryController() 
+        {
+        
+        }
     }
 }
