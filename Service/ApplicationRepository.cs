@@ -24,14 +24,14 @@ namespace WebCookingBook.Service
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Category>> GetCategoriesAsync()
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Categories.ToListAsync();
         }
 
-        public Task<Category> GetCategoryAsync(int categoryId)
+        public async Task<Category?> GetCategoryAsync(int categoryId)
         {
-            throw new NotImplementedException();
+            return await _context.Categories.Where(c=>c.Id == categoryId).FirstOrDefaultAsync();
         }
 
         public async Task<Recipe?> GetRecipeAsync(int recipeId)
