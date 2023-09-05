@@ -2,6 +2,7 @@
   "profiles": {
     "WebCookingBook": {
       "commandName": "Project",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

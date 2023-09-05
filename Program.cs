@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using WebCookingBook.DbContexts;
 using WebCookingBook.Service;
@@ -12,24 +13,27 @@ builder.Services.AddDbContext<ApplicationContext>(opt =>
     opt.UseSqlite("Data Source=CookingBookDB.db");
 });
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    //app.UseExceptionHandler("/Error");
-    //// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    //app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+// В старых версия .NET core используется связка промежуточного ПО из двух команд
 
-app.UseRouting(); 
-app.UseEndpoints(endpoints => endpoints.MapControllers());
+app.UseRouting(); //   Выбирает наиболее лучший вариант конечной точки
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseEndpoints(endpoints => endpoints.MapControllers()); // Добавляет выполнении конченых точек в конвейре
 
-//app.MapRazorPages();
+// В новых используется
+//app.MapControllers(); 
 
+app.UseHttpsRedirection();
+app.MapControllers();
 app.Run();
+
