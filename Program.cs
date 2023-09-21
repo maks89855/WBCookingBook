@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using WebCookingBook.DbContexts;
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<ApplicationContext>(opt =>
     opt.UseSqlite("Data Source=CookingBookDB.db");
 });
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

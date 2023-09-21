@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebCookingBook.DbContexts;
+using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
 
 namespace WebCookingBook.Service
@@ -14,14 +15,18 @@ namespace WebCookingBook.Service
             this._context = context;
         }
 
-        public Task<Category> AddCategoryAsync()
+        public async Task AddCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            _context.Categories.Add(category);
         }
 
-        public Task<Recipe> AddRecipeAsync(int categoryId, int recipeId)
+        public async Task AddRecipeAsync(int categoryId, Recipe recipe)
         {
-            throw new NotImplementedException();
+            var category = await GetCategoryAsync(categoryId);
+            if (category != null)
+            {
+                category.Recipes.Add(recipe);
+            }
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
@@ -34,14 +39,18 @@ namespace WebCookingBook.Service
             return await _context.Categories.Where(c=>c.Id == categoryId).FirstOrDefaultAsync();
         }
 
-        public async Task<Recipe?> GetRecipeAsync(int recipeId)
+        public async Task<Recipe?> GetRecipeAsync(int categoryId, int recipeId)
         {
-            return await _context.Recipes.Where(f => f.Id == recipeId).FirstOrDefaultAsync();
+            return await _context.Recipes.Where(f =>f.CategoryId == categoryId && f.Id == recipeId).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId)
         {
             return await _context.Recipes.Where(c=>c.CategoryId == categoryId).ToListAsync();
+        }
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (_context.SaveChanges()>=0);
         }
     }
 }
