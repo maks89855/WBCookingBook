@@ -19,7 +19,7 @@ namespace WebCookingBook.Controllers
             this._applicationRepository = applicationRepository;
             this._mapper = mapper;
         }
-        [HttpGet("{categoryId}")]
+        [HttpGet("{categoryId}", Name = "GetCategory")]
         public async Task<ActionResult<GetCategoryDTO>> GetCategory(int categoryId)
         {
             var category = await _applicationRepository.GetCategoryAsync(categoryId);
@@ -30,7 +30,7 @@ namespace WebCookingBook.Controllers
             return Ok(_mapper.Map<GetCategoryDTO>(category));
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategoriesAsync()
+        public async Task<ActionResult<IEnumerable<GetCategoryDTO>>> GetCategoriesAsync()
         {
             var categories = await _applicationRepository.GetCategoriesAsync();
             return Ok(categories);
@@ -41,7 +41,10 @@ namespace WebCookingBook.Controllers
             var category = _mapper.Map<Category>(categoryDTO);
             await _applicationRepository.AddCategoryAsync(category);
             await _applicationRepository.SaveChangesAsync();
-            return Ok(category);
+            return CreatedAtRoute("GetCategory", new
+            {
+                categoryId = category.Id
+            });
         }
     }
 }
