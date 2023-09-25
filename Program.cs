@@ -24,6 +24,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseExceptionHandler(opt =>
+    {
+        opt.Run(async context =>
+        {
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsync("Oops, something went wrong");
+        });
+    });
+}
 
 // В старых версия .NET core используется связка промежуточного ПО из двух команд
 
