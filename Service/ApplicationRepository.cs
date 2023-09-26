@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebCookingBook.DbContexts;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
@@ -28,7 +29,15 @@ namespace WebCookingBook.Service
                 category.Recipes.Add(recipe);
             }
         }
-
+        public async Task<IEnumerable<Category>> GetCategoriesAsync(string searchCategory)
+        {
+            if (string.IsNullOrWhiteSpace(searchCategory))
+            {
+                return await GetCategoriesAsync();
+            }
+            searchCategory = searchCategory.Trim();
+            return await _context.Categories.Where(c => c.NameCategory == searchCategory).ToListAsync();
+        }
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
             return await _context.Categories.ToListAsync();
@@ -47,6 +56,12 @@ namespace WebCookingBook.Service
         public async Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId)
         {
             return await _context.Recipes.Where(c=>c.CategoryId == categoryId).ToListAsync();
+        }
+        public async Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId,string seacrhRecipe)
+        {
+            if (string.IsNullOrWhiteSpace(seacrhRecipe)) return await GetRecipesAsync(categoryId);
+            seacrhRecipe = seacrhRecipe.Trim();
+            return await _context.Recipes.Where(c => c.CategoryId == categoryId && c.Name.Contains(seacrhRecipe)).ToListAsync();
         }
         public async Task<bool> SaveChangesAsync()
         {
