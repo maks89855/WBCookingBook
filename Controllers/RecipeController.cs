@@ -36,9 +36,9 @@ namespace WebCookingBook.Controllers
         }
         [HttpHead]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetRecipesAsync(int categoryId)
+        public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetRecipesAsync(int categoryId, string? searchRecipe)
         {
-            var recipe = await _applicationRepository.GetRecipesAsync(categoryId);
+            var recipe = await _applicationRepository.GetRecipesAsync(categoryId, searchRecipe);
             if (recipe == null)
             {
                 return NotFound();
