@@ -29,6 +29,7 @@ namespace WebCookingBook.Controllers
             }
             return Ok(_mapper.Map<GetCategoryDTO>(category));
         }
+        [HttpHead]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetCategoryDTO>>> GetCategoriesAsync()
         {
