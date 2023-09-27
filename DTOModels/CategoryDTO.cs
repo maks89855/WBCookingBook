@@ -4,13 +4,14 @@ using WebCookingBook.Models;
 
 namespace WebCookingBook.DTOModels
 {
-    public class GetCategoryDTO
+    public class CategoryDTO
     {
+        public int Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string NameCategory { get; set; } = "Category";
         public ICollection<Recipe> Recipes { get; set; } = new List<Recipe> { };
-        public GetCategoryDTO()
+        public CategoryDTO()
         {
             //this.NameCategory = nameCategory;
         }
