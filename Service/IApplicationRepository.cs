@@ -13,7 +13,7 @@ namespace WebCookingBook.Service
         Task<IEnumerable<Category>> GetCategoriesAsync(string searchCategory);
         Task AddCategoryAsync (Category category);
 
-
+        Task<bool> ExistsCategoryAsync(int categoryId);
         #endregion
         #region Recipe
 

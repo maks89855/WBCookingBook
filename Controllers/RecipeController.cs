@@ -48,8 +48,7 @@ namespace WebCookingBook.Controllers
         [HttpPost]
         public async Task<ActionResult<Recipe>> AddRecipeAsync(int categoryId,CreateRecipeDTO createRecipeDTO)
         {
-            var category = _applicationRepository.GetCategoryAsync(categoryId);
-            if(category == null) return NotFound();
+            if(!await _applicationRepository.ExistsCategoryAsync(categoryId)) return NotFound();
             var recipe = _mapper.Map<Recipe>(createRecipeDTO);
             await _applicationRepository.AddRecipeAsync(categoryId, recipe);
             await _applicationRepository.SaveChangesAsync();

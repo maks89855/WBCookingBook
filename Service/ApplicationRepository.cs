@@ -29,6 +29,12 @@ namespace WebCookingBook.Service
                 category.Recipes.Add(recipe);
             }
         }
+
+        public async Task<bool> ExistsCategoryAsync(int categoryId)
+        {
+            return await _context.Categories.AnyAsync(c=>c.Id == categoryId);
+        }
+
         public async Task<IEnumerable<Category>> GetCategoriesAsync(string searchCategory)
         {
             if (string.IsNullOrWhiteSpace(searchCategory))
