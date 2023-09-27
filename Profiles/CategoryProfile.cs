@@ -9,7 +9,7 @@ namespace WebCookingBook.Profiles
         public CategoryProfile()
         {
             CreateMap<CreateCategoryDTO, Category>();
-            CreateMap<Category, GetCategoryDTO>();
+            CreateMap<Category, CategoryDTO>();
         }
     }
 }
