@@ -38,7 +38,7 @@ namespace WebCookingBook.Controllers
             var categories = await _applicationRepository.GetCategoriesAsync(searchCategory);
             return Ok(_mapper.Map<IEnumerable<GetCategoryDTO>>(categories));
         }
-        [HttpPatch]
+        [HttpPost]
         public async Task<ActionResult<Category>> AddCategory(CreateCategoryDTO categoryDTO)
         {
             var category = _mapper.Map<Category>(categoryDTO);

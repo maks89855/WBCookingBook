@@ -45,7 +45,7 @@ namespace WebCookingBook.Controllers
             }
             return Ok(_mapper.Map<IEnumerable<RecipeDTO>>(recipe));
         }
-        [HttpPatch]
+        [HttpPost]
         public async Task<ActionResult<Recipe>> AddRecipeAsync(int categoryId,CreateRecipeDTO createRecipeDTO)
         {
             var recipe =  _mapper.Map<Recipe>(createRecipeDTO);

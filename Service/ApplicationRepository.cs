@@ -43,12 +43,12 @@ namespace WebCookingBook.Service
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<Category?> GetCategoryAsync(int categoryId)
+        public async Task<Category> GetCategoryAsync(int categoryId)
         {
             return await _context.Categories.Where(c=>c.Id == categoryId).FirstOrDefaultAsync();
         }
 
-        public async Task<Recipe?> GetRecipeAsync(int categoryId, int recipeId)
+        public async Task<Recipe> GetRecipeAsync(int categoryId, int recipeId)
         {
             return await _context.Recipes.Where(f =>f.CategoryId == categoryId && f.Id == recipeId).FirstOrDefaultAsync();
         }
