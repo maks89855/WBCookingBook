@@ -9,6 +9,6 @@ namespace WebCookingBook.DTOModels
         [Required]
         [MaxLength(50)]
         public string NameCategory { get; set; } = "Category";
-        //public ICollection<Recipe> Recipes { get; set; } = new List<Recipe> { };
+        public ICollection<CreateRecipeDTO> Recipes { get; set; } = new List<CreateRecipeDTO> { };
     }
 }
