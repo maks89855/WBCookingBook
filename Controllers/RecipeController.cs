@@ -7,7 +7,7 @@ using WebCookingBook.Service;
 
 namespace WebCookingBook.Controllers
 {
-    [Route("api/category/{categoryId}/[controller]")]
+    [Route("api/category/{categoryId}/recipes")]
     [ApiController]
     public class RecipeController : ControllerBase
     {
