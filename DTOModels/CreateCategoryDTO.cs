@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using WebCookingBook.Models;
+using WebCookingBook.API.ValidationAttributes;
 
 namespace WebCookingBook.DTOModels
 {
+    [CategoryDoesntContainAttribute]
     public class CreateCategoryDTO
     {
         [Required]
