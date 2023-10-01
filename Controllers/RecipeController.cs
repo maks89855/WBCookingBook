@@ -60,5 +60,11 @@ namespace WebCookingBook.Controllers
 
             }, categoryFinnaly);
         }
+        [HttpOptions]
+        public IActionResult GetRecipeOptions()
+        {
+            Response.Headers.Add("Allow", "GET, POST");
+            return Ok();
+        }
     }
 }

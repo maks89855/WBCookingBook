@@ -10,11 +10,11 @@ namespace WebCookingBook.Models
         public int Id { get; set; }
         [Required]
         [MaxLength(50)]
-        public string NameCategory { get; set; } = "Category";
+        public string NameCategory { get; set; }
         public ICollection<Recipe> Recipes { get; set; } = new List<Recipe> { };
         public Category()
         {
-            //this.NameCategory = nameCategory;
+            this.NameCategory = "Category";
         }
     }
 }
