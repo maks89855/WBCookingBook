@@ -50,5 +50,11 @@ namespace WebCookingBook.Controllers
                 categoryId = category.Id
             }, returnCategory);
         }
+        [HttpOptions]
+        public IActionResult GetCategoryOptions()
+        {
+            Response.Headers.Add("Allow", "GET, POST");
+            return Ok();
+        }
     }
 }
