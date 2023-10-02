@@ -5,12 +5,12 @@ using WebCookingBook.API.ValidationAttributes;
 
 namespace WebCookingBook.DTOModels
 {
-    [CategoryDoesntContainAttribute]
+    [CategoryDoesntContainAttribute(ErrorMessage = "Нельзя создать категорию с таким названием, попробуйте другое")]
     public class CreateCategoryDTO
     {
         [Required]
-        [MaxLength(50)]
-        public string NameCategory { get; set; } = "Category";
+        [MaxLength(50, ErrorMessage = "Превышен лимит символов. Макс. кол-во 50 символов")]
+        public string NameCategory { get; set; } = "Категория";
         public ICollection<CreateRecipeDTO>? Recipes { get; set; } = new List<CreateRecipeDTO> { };
     }
 }

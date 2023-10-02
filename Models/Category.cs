@@ -9,12 +9,12 @@ namespace WebCookingBook.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(50, ErrorMessage ="Превышен лимит символов. Макс. кол-во 50 символов")]
         public string NameCategory { get; set; }
         public ICollection<Recipe> Recipes { get; set; } = new List<Recipe> { };
         public Category()
         {
-            this.NameCategory = "Category";
+            this.NameCategory = "Категория";
         }
     }
 }

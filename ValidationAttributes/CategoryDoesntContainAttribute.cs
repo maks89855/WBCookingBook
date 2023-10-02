@@ -16,7 +16,7 @@ namespace WebCookingBook.API.ValidationAttributes
             {
                 if (item.Contains(category.NameCategory))
                 {
-                     return new ValidationResult("Invalid category name");
+                     return new ValidationResult(ErrorMessage);
                 }
             }
         return ValidationResult.Success;

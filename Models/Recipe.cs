@@ -14,7 +14,7 @@ namespace WebCookingBook.Models
         public Category? Category { get; set; }
         public int CategoryId { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Превышен лимит символов. Макс. кол-во 50 символов")]
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? Ingredients { get; set; }
@@ -22,7 +22,7 @@ namespace WebCookingBook.Models
 
         public Recipe()
         {
-            this.Name = "Recipe";
+            this.Name = "Рецепт";
         }
     }
 }
