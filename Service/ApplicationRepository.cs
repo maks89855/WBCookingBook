@@ -35,6 +35,11 @@ namespace WebCookingBook.Service
             return await _context.Categories.AnyAsync(c=>c.Id == categoryId);
         }
 
+        public async Task<bool> ExistsRecipeAsync(int categoryId,int recipeId)
+        {
+            return await _context.Recipes.AnyAsync(c=> c.CategoryId == categoryId && c.Id == recipeId);
+        }
+
         public async Task<IEnumerable<Category>> GetCategoriesAsync(string searchCategory)
         {
             if (string.IsNullOrWhiteSpace(searchCategory))
@@ -72,6 +77,16 @@ namespace WebCookingBook.Service
         public async Task<bool> SaveChangesAsync()
         {
             return (_context.SaveChanges()>=0);
+        }
+
+        public void UpdateCategoryAsync(Category category)
+        {
+            
+        }
+
+        public void UpdateRecipeAsync(Recipe recipe)
+        {
+            
         }
     }
 }

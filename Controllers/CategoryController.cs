@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebCookingBook.API.DTOModels;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
 using WebCookingBook.Service;
@@ -14,7 +15,7 @@ namespace WebCookingBook.Controllers
         private readonly IApplicationRepository _applicationRepository;
         private readonly IMapper _mapper;
 
-        public CategoryController(IApplicationRepository applicationRepository, IMapper mapper) 
+        public CategoryController(IApplicationRepository applicationRepository, IMapper mapper)
         {
             this._applicationRepository = applicationRepository;
             this._mapper = mapper;
@@ -24,9 +25,9 @@ namespace WebCookingBook.Controllers
             int categoryId)
         {
             var category = await _applicationRepository.GetCategoryAsync(categoryId);
-            if (category == null) 
-            { 
-                return NotFound(); 
+            if (category == null)
+            {
+                return NotFound();
             }
             return Ok(_mapper.Map<CategoryDTO>(category));
         }
@@ -56,5 +57,20 @@ namespace WebCookingBook.Controllers
             Response.Headers.Add("Allow", "GET, POST");
             return Ok();
         }
+
+        [HttpPut("{categoryId}")]
+        public async Task<ActionResult<Category>> UpdateCategory(int categoryId, UpdateCategoryDTO updateCategoryDTO)
+        {
+            if (!await _applicationRepository.ExistsCategoryAsync(categoryId))
+            {
+                return NotFound();
+            }
+            var category = await _applicationRepository.GetCategoryAsync(categoryId);
+            _mapper.Map(updateCategoryDTO, category);
+            _applicationRepository.UpdateCategoryAsync(category);
+            await _applicationRepository.SaveChangesAsync();
+            return NoContent();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WebCookingBook.API.DTOModels;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
 
@@ -12,6 +13,7 @@ namespace WebCookingBook.Profiles
             CreateMap<CreateCategoryDTO, RecipeDTO>();
             CreateMap<Recipe, RecipeDTO>();
             CreateMap<RecipeDTO, Recipe>();
+            CreateMap<UpdateRecipeDTO, Recipe>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebCookingBook.API.DTOModels;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
 using WebCookingBook.Service;
@@ -65,6 +66,19 @@ namespace WebCookingBook.Controllers
         {
             Response.Headers.Add("Allow", "GET, POST");
             return Ok();
+        }
+        [HttpPut("{recipeId}")]
+        public async Task<ActionResult<Recipe>> UpdateRecipe(int categoryId,int recipeId, UpdateRecipeDTO updateRecipeDTO)
+        {
+            if(!await _applicationRepository.ExistsRecipeAsync(categoryId, recipeId))
+            {
+                return NotFound();
+            }         
+            var recipe = await _applicationRepository.GetRecipeAsync(categoryId, recipeId);
+            _mapper.Map(updateRecipeDTO, recipe);
+            _applicationRepository.UpdateRecipeAsync(recipe);
+            await _applicationRepository.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
