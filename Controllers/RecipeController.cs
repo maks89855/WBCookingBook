@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebCookingBook.API.DTOModels;
 using WebCookingBook.DTOModels;
@@ -8,7 +9,7 @@ using WebCookingBook.Service;
 
 namespace WebCookingBook.Controllers
 {
-    [Route("api/category/{categoryId}/recipes")]
+    [Route("api/categories/{categoryId}/recipes")]
     [ApiController]
     public class RecipeController : ControllerBase
     {
@@ -46,6 +47,7 @@ namespace WebCookingBook.Controllers
             }
             return Ok(_mapper.Map<IEnumerable<RecipeDTO>>(recipe));
         }
+
         [HttpPost]
         public async Task<ActionResult<Recipe>> AddRecipeAsync(int categoryId,CreateRecipeDTO createRecipeDTO)
         {
@@ -61,12 +63,14 @@ namespace WebCookingBook.Controllers
 
             }, categoryFinnaly);
         }
+
         [HttpOptions]
         public IActionResult GetRecipeOptions()
         {
             Response.Headers.Add("Allow", "GET, POST");
             return Ok();
         }
+
         [HttpPut("{recipeId}")]
         public async Task<ActionResult<Recipe>> UpdateRecipe(int categoryId,int recipeId, UpdateRecipeDTO updateRecipeDTO)
         {
@@ -78,6 +82,32 @@ namespace WebCookingBook.Controllers
             _mapper.Map(updateRecipeDTO, recipe);
             _applicationRepository.UpdateRecipeAsync(recipe);
             await _applicationRepository.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPatch("{recipeId}")]
+        public async Task<ActionResult<Category>> UpdateCategory(int categoryId, int recipeId, JsonPatchDocument<UpdateRecipeDTO> patchDocument)
+        {
+            if(!await _applicationRepository.ExistsRecipeAsync(categoryId, recipeId))
+            {
+                return NotFound();
+            }
+            var recipe = await _applicationRepository.GetRecipeAsync(categoryId, recipeId);
+
+            var recipePatch = _mapper.Map<UpdateRecipeDTO>(recipe);
+
+            patchDocument.ApplyTo(recipePatch);
+
+            if (!TryValidateModel(recipePatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(recipePatch, recipe);
+
+            _applicationRepository.UpdateRecipeAsync(recipe);
+            await _applicationRepository.SaveChangesAsync();
+
             return NoContent();
         }
     }

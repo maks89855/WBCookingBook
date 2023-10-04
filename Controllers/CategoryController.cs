@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebCookingBook.API.DTOModels;
 using WebCookingBook.DTOModels;
@@ -32,7 +33,7 @@ namespace WebCookingBook.Controllers
             return Ok(_mapper.Map<CategoryDTO>(category));
         }
         [HttpHead]
-        [HttpGet()]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategoriesAsync(
             string? searchCategory)
         {
@@ -63,14 +64,57 @@ namespace WebCookingBook.Controllers
         {
             if (!await _applicationRepository.ExistsCategoryAsync(categoryId))
             {
-                return NotFound();
+                var addCategory = _mapper.Map<Category>(updateCategoryDTO);
+                addCategory.Id = categoryId;
+
+                await _applicationRepository.AddCategoryAsync(addCategory);
+                await _applicationRepository.SaveChangesAsync();
+
+                var returnCategory = _mapper.Map<CategoryDTO>(addCategory);
+
+                return CreatedAtRoute("GetCategory", new
+                {
+                    categoryId = returnCategory.Id
+                }, returnCategory);
             }
+
             var category = await _applicationRepository.GetCategoryAsync(categoryId);
+
             _mapper.Map(updateCategoryDTO, category);
             _applicationRepository.UpdateCategoryAsync(category);
             await _applicationRepository.SaveChangesAsync();
+
             return NoContent();
         }
+        [HttpPatch("{categoryId}")]
+        public async Task<ActionResult<Category>> UpdateCategory(int categoryId, JsonPatchDocument<UpdateCategoryDTO> patchDocument)
+        {
+            if(!await _applicationRepository.ExistsCategoryAsync(categoryId))
+            {
+                return NotFound();
+            }
+            var category = await _applicationRepository.GetCategoryAsync(categoryId);
 
+            var categoryPatch = _mapper.Map<UpdateCategoryDTO>(category);
+
+            patchDocument.ApplyTo(categoryPatch);
+
+            if (!TryValidateModel(categoryPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(categoryPatch, category);
+
+            _applicationRepository.UpdateCategoryAsync(category);
+            await _applicationRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+        //[HttpDelete("{categoryId}")]
+        //public async Task<ActionResult<Category>> DeleteCategory(int categoryId)
+        //{
+
+        //}
     }
 }
