@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using WebCookingBook.DbContexts;
 using WebCookingBook.Service;
 
@@ -10,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddRazorPages();
 
 builder.Services.AddControllers()
+    .AddNewtonsoftJson(opt =>
+    {
+        opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+    })
     .AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddDbContext<ApplicationContext>(opt =>

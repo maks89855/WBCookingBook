@@ -30,6 +30,16 @@ namespace WebCookingBook.Service
             }
         }
 
+        public void DeleteCategoryAsync(Category category)
+        {
+            _context.Categories.Remove(category);
+        }
+
+        public void DeleteRecipeAsync(Recipe recipe)
+        {
+            _context.Recipes.Remove(recipe);
+        }
+
         public async Task<bool> ExistsCategoryAsync(int categoryId)
         {
             return await _context.Categories.AnyAsync(c=>c.Id == categoryId);

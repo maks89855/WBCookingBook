@@ -14,9 +14,11 @@ namespace WebCookingBook.Service
         Task AddCategoryAsync (Category category);
 
         void UpdateCategoryAsync (Category category);
+        void DeleteCategoryAsync (Category category);
 
         Task<bool> ExistsCategoryAsync(int categoryId);
         #endregion
+
         #region Recipe
 
         Task<Recipe> GetRecipeAsync(int categoryId, int recipeId);
@@ -25,6 +27,7 @@ namespace WebCookingBook.Service
         Task AddRecipeAsync(int categoryId, Recipe recipe);
         Task<bool> ExistsRecipeAsync(int categoryId, int recipeId);
         void UpdateRecipeAsync(Recipe recipe);
+        void DeleteRecipeAsync(Recipe recipe);
 
         #endregion
     }

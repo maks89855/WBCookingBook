@@ -14,6 +14,7 @@ namespace WebCookingBook.Profiles
             CreateMap<Recipe, RecipeDTO>();
             CreateMap<RecipeDTO, Recipe>();
             CreateMap<UpdateRecipeDTO, Recipe>();
+            CreateMap<Recipe, UpdateRecipeDTO>();
         }
     }
 }
