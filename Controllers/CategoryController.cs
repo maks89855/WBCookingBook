@@ -97,7 +97,7 @@ namespace WebCookingBook.Controllers
 
             var categoryPatch = _mapper.Map<UpdateCategoryDTO>(category);
 
-            patchDocument.ApplyTo(categoryPatch);
+            patchDocument.ApplyTo(categoryPatch, ModelState);
 
             if (!TryValidateModel(categoryPatch))
             {
@@ -111,10 +111,17 @@ namespace WebCookingBook.Controllers
 
             return NoContent();
         }
-        //[HttpDelete("{categoryId}")]
-        //public async Task<ActionResult<Category>> DeleteCategory(int categoryId)
-        //{
-
-        //}
+        [HttpDelete("{categoryId}")]
+        public async Task<ActionResult<Category>> DeleteCategory(int categoryId)
+        {
+            if(!await _applicationRepository.ExistsCategoryAsync(categoryId))
+            {
+                return NotFound();
+            }
+            var category = await _applicationRepository.GetCategoryAsync(categoryId);
+            _applicationRepository.DeleteCategoryAsync(category);
+            await _applicationRepository.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
