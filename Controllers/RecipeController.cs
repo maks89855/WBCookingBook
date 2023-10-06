@@ -96,7 +96,7 @@ namespace WebCookingBook.Controllers
 
             var recipePatch = _mapper.Map<UpdateRecipeDTO>(recipe);
 
-            patchDocument.ApplyTo(recipePatch);
+            patchDocument.ApplyTo(recipePatch, ModelState);
 
             if (!TryValidateModel(recipePatch))
             {
@@ -108,6 +108,18 @@ namespace WebCookingBook.Controllers
             _applicationRepository.UpdateRecipeAsync(recipe);
             await _applicationRepository.SaveChangesAsync();
 
+            return NoContent();
+        }
+        [HttpDelete("{recipeId}")]
+        public async Task<ActionResult<Recipe>> DeleteRecipe(int categoryId, int recipeId)
+        {
+            if (!await _applicationRepository.ExistsRecipeAsync(categoryId, recipeId))
+            {
+                return NotFound();
+            }
+            var recipe = await _applicationRepository.GetRecipeAsync(categoryId, recipeId);
+            _applicationRepository.DeleteRecipeAsync(recipe);
+            await _applicationRepository.SaveChangesAsync();
             return NoContent();
         }
     }
