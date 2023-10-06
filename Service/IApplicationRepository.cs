@@ -10,15 +10,24 @@ namespace WebCookingBook.Service
 
         Task<Category> GetCategoryAsync(int categoryId);
         Task<IEnumerable<Category>> GetCategoriesAsync();
+        Task<IEnumerable<Category>> GetCategoriesAsync(string searchCategory);
         Task AddCategoryAsync (Category category);
 
+        void UpdateCategoryAsync (Category category);
+        void DeleteCategoryAsync (Category category);
 
+        Task<bool> ExistsCategoryAsync(int categoryId);
         #endregion
+
         #region Recipe
 
         Task<Recipe> GetRecipeAsync(int categoryId, int recipeId);
         Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId);
+        Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId, string searchRecipe);
         Task AddRecipeAsync(int categoryId, Recipe recipe);
+        Task<bool> ExistsRecipeAsync(int categoryId, int recipeId);
+        void UpdateRecipeAsync(Recipe recipe);
+        void DeleteRecipeAsync(Recipe recipe);
 
         #endregion
     }

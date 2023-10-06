@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using WebCookingBook.API.DTOModels;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
 using WebCookingBook.Service;
 
 namespace WebCookingBook.Controllers
 {
-    [Route("api/category/{categoryId}/[controller]")]
+    [Route("api/categories/{categoryId}/recipes")]
     [ApiController]
     public class RecipeController : ControllerBase
     {
@@ -34,22 +36,23 @@ namespace WebCookingBook.Controllers
             }
             return Ok(_mapper.Map<RecipeDTO>(recipe));
         }
-
+        [HttpHead]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetRecipesAsync(int categoryId)
+        public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetRecipesAsync(int categoryId, string? searchRecipe)
         {
-            var recipe = await _applicationRepository.GetRecipesAsync(categoryId);
+            var recipe = await _applicationRepository.GetRecipesAsync(categoryId, searchRecipe);
             if (recipe == null)
             {
                 return NotFound();
             }
             return Ok(_mapper.Map<IEnumerable<RecipeDTO>>(recipe));
         }
-        [HttpPatch]
+
+        [HttpPost]
         public async Task<ActionResult<Recipe>> AddRecipeAsync(int categoryId,CreateRecipeDTO createRecipeDTO)
         {
-            var recipe =  _mapper.Map<Recipe>(createRecipeDTO);
-            if(recipe == null) return NotFound();
+            if(!await _applicationRepository.ExistsCategoryAsync(categoryId)) return NotFound();
+            var recipe = _mapper.Map<Recipe>(createRecipeDTO);
             await _applicationRepository.AddRecipeAsync(categoryId, recipe);
             await _applicationRepository.SaveChangesAsync();
             var categoryFinnaly = _mapper.Map<RecipeDTO>(recipe);
@@ -58,7 +61,66 @@ namespace WebCookingBook.Controllers
                 categoryId = categoryId,
                 recipeId = categoryFinnaly.Id
 
-            });
+            }, categoryFinnaly);
+        }
+
+        [HttpOptions]
+        public IActionResult GetRecipeOptions()
+        {
+            Response.Headers.Add("Allow", "GET, POST");
+            return Ok();
+        }
+
+        [HttpPut("{recipeId}")]
+        public async Task<ActionResult<Recipe>> UpdateRecipe(int categoryId,int recipeId, UpdateRecipeDTO updateRecipeDTO)
+        {
+            if(!await _applicationRepository.ExistsRecipeAsync(categoryId, recipeId))
+            {
+                return NotFound();
+            }         
+            var recipe = await _applicationRepository.GetRecipeAsync(categoryId, recipeId);
+            _mapper.Map(updateRecipeDTO, recipe);
+            _applicationRepository.UpdateRecipeAsync(recipe);
+            await _applicationRepository.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPatch("{recipeId}")]
+        public async Task<ActionResult<Category>> UpdateCategory(int categoryId, int recipeId, JsonPatchDocument<UpdateRecipeDTO> patchDocument)
+        {
+            if(!await _applicationRepository.ExistsRecipeAsync(categoryId, recipeId))
+            {
+                return NotFound();
+            }
+            var recipe = await _applicationRepository.GetRecipeAsync(categoryId, recipeId);
+
+            var recipePatch = _mapper.Map<UpdateRecipeDTO>(recipe);
+
+            patchDocument.ApplyTo(recipePatch, ModelState);
+
+            if (!TryValidateModel(recipePatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(recipePatch, recipe);
+
+            _applicationRepository.UpdateRecipeAsync(recipe);
+            await _applicationRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [HttpDelete("{recipeId}")]
+        public async Task<ActionResult<Recipe>> DeleteRecipe(int categoryId, int recipeId)
+        {
+            if (!await _applicationRepository.ExistsRecipeAsync(categoryId, recipeId))
+            {
+                return NotFound();
+            }
+            var recipe = await _applicationRepository.GetRecipeAsync(categoryId, recipeId);
+            _applicationRepository.DeleteRecipeAsync(recipe);
+            await _applicationRepository.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

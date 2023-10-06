@@ -1,16 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using WebCookingBook.Models;
-using WebCookingBook.API.ValidationAttributes;
 
 namespace WebCookingBook.DTOModels
 {
-    [CategoryDoesntContainAttribute(ErrorMessage = "Нельзя создать категорию с таким названием, попробуйте другое")]
-    public class CreateCategoryDTO
+    public class CategoryDTO
     {
+        public int Id { get; set; }
         [Required]
         [MaxLength(50, ErrorMessage = "Превышен лимит символов. Макс. кол-во 50 символов")]
         public string NameCategory { get; set; } = "Категория";
-        public ICollection<CreateRecipeDTO>? Recipes { get; set; } = new List<CreateRecipeDTO> { };
+        public ICollection<RecipeDTO> Recipes { get; set; } = new List<RecipeDTO> { };
+        public CategoryDTO()
+        {
+            //this.NameCategory = nameCategory;
+        }
     }
 }
