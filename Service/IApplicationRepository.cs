@@ -21,11 +21,11 @@ namespace WebCookingBook.Service
 
         #region Recipe
 
-        Task<Recipe> GetRecipeAsync(int categoryId, int recipeId);
-        Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId);
-        Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId, string searchRecipe);
-        Task AddRecipeAsync(int categoryId, Recipe recipe);
-        Task<bool> ExistsRecipeAsync(int categoryId, int recipeId);
+        Task<Recipe> GetRecipeAsync(int recipeId);
+		Task<IEnumerable<Recipe>> GetRecipesAsync();
+		Task<IEnumerable<Recipe>> GetRecipesAsync(string searchRecipe);
+        Task AddRecipeAsync(Recipe recipe);
+        Task<bool> ExistsRecipeAsync(int recipeId);
         void UpdateRecipeAsync(Recipe recipe);
         void DeleteRecipeAsync(Recipe recipe);
 
