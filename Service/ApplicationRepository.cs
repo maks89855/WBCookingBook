@@ -21,11 +21,22 @@ namespace WebCookingBook.Service
             _context.Categories.Add(category);
         }
 
-        public async Task AddRecipeAsync(Recipe recipe)
-        {
-  
-            _context.Recipes.Add(recipe);
+		public async Task AddIngredientAsync(int recipeID, Ingredient Ingredient)
+		{
+			var recipe = await _context.Recipes.FirstOrDefaultAsync(c=>c.Id == recipeID);
+            if(recipe != null)
+            {
+                recipe.Ingredients.Add(Ingredient);
+            }
+		}
 
+		public async Task AddRecipeAsync(int categoryId, Recipe recipe)
+        {
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);      
+            if(category != null)
+            {
+				category.Recipes.Add(recipe);
+			}           
         }
 
         public void DeleteCategoryAsync(Category category)
@@ -33,7 +44,12 @@ namespace WebCookingBook.Service
             _context.Categories.Remove(category);
         }
 
-        public void DeleteRecipeAsync(Recipe recipe)
+		public void DeleteIngredientAsync(Ingredient Ingredient)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DeleteRecipeAsync(Recipe recipe)
         {
             _context.Recipes.Remove(recipe);
         }
@@ -43,7 +59,12 @@ namespace WebCookingBook.Service
             return await _context.Categories.AnyAsync(c=>c.Id == categoryId);
         }
 
-        public async Task<bool> ExistsRecipeAsync(int recipeId)
+		public Task<bool> ExistsIngredienteAsync(int IngredientId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<bool> ExistsRecipeAsync(int recipeId)
         {
             return await _context.Recipes.AnyAsync(c=> c.Id == recipeId);
         }
@@ -67,7 +88,27 @@ namespace WebCookingBook.Service
             return await _context.Categories.Where(c=>c.Id == categoryId).FirstOrDefaultAsync();
         }
 
-        public async Task<Recipe> GetRecipeAsync(int recipeId)
+		public async Task<Ingredient> GetIngredientAsync(int IngredientId)
+		{
+            return await _context.Ingredients.Where(c => c.Id == IngredientId).FirstOrDefaultAsync();
+		}
+
+		public async Task<IEnumerable<Ingredient>> GetIngredientsAsync()
+		{
+            return await _context.Ingredients.ToListAsync();
+		}
+
+		public async Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId)
+		{
+            return await _context.Ingredients.Where(c => c.RecipeId == recipeId).ToListAsync();
+		}
+
+		public Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId, string searchIngredient)
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<Recipe> GetRecipeAsync(int recipeId)
         {
             return await _context.Recipes.Where(f =>f.Id == recipeId).FirstOrDefaultAsync();
         }
@@ -91,7 +132,12 @@ namespace WebCookingBook.Service
             
         }
 
-        public void UpdateRecipeAsync(Recipe recipe)
+		public void UpdateIngredientAsync(Ingredient Ingredient)
+		{
+			
+		}
+
+		public void UpdateRecipeAsync(Recipe recipe)
         {
             
         }

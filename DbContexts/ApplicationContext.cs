@@ -7,6 +7,8 @@ namespace WebCookingBook.DbContexts
     {
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<Recipe> Recipes { get; set; } = null!;
+        public DbSet<Ingredient> Ingredients { get; set; } = null!;
+        public DbSet<StepCook> StepCooks { get; set; } = null!;
         public ApplicationContext(DbContextOptions options) : base(options)
         {
 
@@ -66,6 +68,16 @@ namespace WebCookingBook.DbContexts
                     Id = 4,
                     Name = "fourth",
                     CategoryId = 3,
+                }
+            );
+            modelBuilder.Entity<Ingredient>().HasData(
+                new Ingredient
+                {
+                    Id = 1,
+                    RecipeId = 1,
+                    NameIngredient = "First",
+                    Count = 1,
+                    Units = API.Models.Unit.г
                 }
             );
             base.OnModelCreating(modelBuilder);

@@ -8,7 +8,7 @@ namespace WebCookingBook.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int Id { get; set; } = 1;
         //public Image Image { get; set; }
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
@@ -17,8 +17,8 @@ namespace WebCookingBook.Models
         [MaxLength(50, ErrorMessage = "Превышен лимит символов. Макс. кол-во 50 символов")]
         public string Name { get; set; }
         public string? Description { get; set; }
-        public string? Ingredients { get; set; }
-        public string? PreparationMethod { get; set; }
+        public ICollection<Ingredient>? Ingredients { get; set; } = new List<Ingredient>();
+        public ICollection<StepCook>? StepsCooking { get; set; } = new List<StepCook>();
 
         public Recipe()
         {
