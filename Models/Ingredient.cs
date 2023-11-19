@@ -12,8 +12,11 @@ namespace WebCookingBook.Models
 		public int RecipeId { get; set; }
 		[ForeignKey("RecipeId")]
 		public Recipe? Recipe { get; set; }
+		[Required]
 		public string NameIngredient { get; set; }
+		[Required]
 		public int Count { get; set; }
+		[Required]
 		public Unit Units { get; set; }
 	}
 }

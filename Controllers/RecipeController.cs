@@ -22,14 +22,18 @@ namespace WebCookingBook.Controllers
             this._mapper = mapper;
         }
         [HttpGet("{recipeId}", Name = "GetRecipe")]
+        //TODO: Добавить bool выражения для отображения ингредиентов
         public async Task<ActionResult<RecipeDTO>> GetRecipe(int recipeId)
         {
             var recipe = await _applicationRepository.GetRecipeAsync(recipeId);
             if (recipe == null)
             {
                 return NotFound();
-            }
-            return Ok(_mapper.Map<RecipeDTO>(recipe));
+            }         
+            var recipefinnaly = _mapper.Map<RecipeDTO>(recipe);
+			var Ingredients = await _applicationRepository.GetIngredientsAsync(recipeId);
+			recipefinnaly.Ingredients = _mapper.Map<IEnumerable<IngredientDTO>>(Ingredients).ToList();
+			return Ok(recipefinnaly);
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetRecipesAsync(string? searchRecipe)
@@ -45,15 +49,16 @@ namespace WebCookingBook.Controllers
         [HttpPost]
         public async Task<ActionResult<Recipe>> AddRecipeAsync(int categoryId, CreateRecipeDTO createRecipeDTO)
         {
+            if(!await _applicationRepository.ExistsCategoryAsync(categoryId)) return NotFound();
             var recipe = _mapper.Map<Recipe>(createRecipeDTO);
             await _applicationRepository.AddRecipeAsync(categoryId, recipe);
             await _applicationRepository.SaveChangesAsync();
-            var categoryFinnaly = _mapper.Map<RecipeDTO>(recipe);
+            var recipeFinnaly = _mapper.Map<RecipeDTO>(recipe);
             return CreatedAtRoute("GetRecipe", new
             {              
-                recipeId = categoryFinnaly.Id
+                recipeId = recipeFinnaly.Id
 
-            }, categoryFinnaly);
+            }, recipeFinnaly);
         }
 
         [HttpOptions]

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebCookingBook.API.Models;
 using WebCookingBook.Models;
 
@@ -8,9 +9,11 @@ namespace WebCookingBook.API.DTOModels
 	{
 		public int Id { get; set; }
 		public int RecipeId { get; set; }
-		public Recipe? Recipe { get; set; }
+		[Required]
 		public string NameIngredient { get; set; }
+		[Required]
 		public int Count { get; set; }
+		[Required]
 		public Unit Units { get; set; }
 	}
 }
