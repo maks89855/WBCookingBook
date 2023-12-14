@@ -12,5 +12,5 @@ namespace WebCookingBook.API.DTOModels
         public string? Description { get; set; }
 		public ICollection<Ingredient>? Ingredients { get; set; } = new List<Ingredient>();
 		public ICollection<StepCook>? StepsCooking { get; set; } = new List<StepCook>();
-	}
+    }
 }

@@ -36,7 +36,6 @@ namespace WebCookingBook.Service
 		Task<bool> ExistsIngredienteAsync(int ingredientId);
 		void UpdateIngredientAsync(Ingredient Ingredient);
 		void DeleteIngredientAsync(int recipeId, Ingredient Ingredient);
-
         #endregion
 
         #region StepCook
