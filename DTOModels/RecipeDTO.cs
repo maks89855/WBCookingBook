@@ -10,12 +10,13 @@ namespace WebCookingBook.DTOModels
     {
         public int Id { get; set; }
         public int CategoryId { get; set; }
+        public CategoryDTO? Category { get; set; }
         [Required]
         [MaxLength(50, ErrorMessage = "Превышен лимит символов. Макс. кол-во 50 символов")]
         public string Name { get; set; } = "Рецепт";
         public string? Description { get; set; }
 		public ICollection<IngredientDTO>? Ingredients { get; set; } = new List<IngredientDTO>();
-		public ICollection<StepCook>? StepsCooking { get; set; }
+		public ICollection<StepCookingDTO>? StepsCooking { get; set; } = new List<StepCookingDTO>();
 
 	}
 }

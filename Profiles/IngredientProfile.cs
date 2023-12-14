@@ -11,6 +11,8 @@ namespace WebCookingBook.API.Profiles
             CreateMap<IngredientDTO, Ingredient>();
             CreateMap<Ingredient, IngredientDTO>();
             CreateMap<CreateIngredientDTO, Ingredient>();
+            CreateMap<UpdateIngredientDTO, Ingredient>();
+            CreateMap<Ingredient, UpdateIngredientDTO>();
         }
     }
 }

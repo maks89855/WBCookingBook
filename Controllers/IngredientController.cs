@@ -8,7 +8,7 @@ using WebCookingBook.Service;
 
 namespace WebCookingBook.API.Controllers
 {
-	[Route("/api/recipe")]
+	[Route("/api/recipes/{recipeId}/Ingredient")]
 	[ApiController]
 	public class IngredientController : Controller
 	{
@@ -20,10 +20,10 @@ namespace WebCookingBook.API.Controllers
 			this._applicationRepository = applicationRepository;
 			this._mapper = mapper;
 		}
-		[HttpGet("{recipeId}", Name = "GetIngredient")]
-		public async Task<ActionResult<IngredientDTO>> GetIngredient(int recipeId)
+		[HttpGet("{ingredientId}", Name = "GetIngredient")]
+		public async Task<ActionResult<IngredientDTO>> GetIngredient(int recipeId, int ingredientId)
 		{
-			var ingredient = await _applicationRepository.GetIngredientAsync(recipeId);
+			var ingredient = await _applicationRepository.GetIngredientAsync(recipeId,ingredientId);
 			if (ingredient == null)
 			{
 				return NotFound();
@@ -52,7 +52,7 @@ namespace WebCookingBook.API.Controllers
 				return Ok(_mapper.Map<IEnumerable<IngredientDTO>>(ingredients));
 			}
 		}
-		[HttpPost("{recipeId}")]
+		[HttpPost]
 		public async Task<ActionResult<Ingredient>> AddIngredientAsync(int recipeId, CreateIngredientDTO createIngredientDTO)
 		{
 			if(! await _applicationRepository.ExistsRecipeAsync(recipeId)) return NotFound();
@@ -62,9 +62,61 @@ namespace WebCookingBook.API.Controllers
 			var ingredientFinnaly = _mapper.Map<IngredientDTO>(ingredient);
 			return CreatedAtRoute("GetIngredient", new
 			{
-				recipeId = ingredientFinnaly.Id
+                recipeId = recipeId,
+                ingredientId = ingredientFinnaly.Id
 
 			}, ingredientFinnaly);
+		}
+
+		[HttpPut("{ingredientId}")]
+		public async Task<ActionResult<Ingredient>> UpdateRecipe(int recipeId, int ingredientId, UpdateIngredientDTO updateIngredientDTO)
+		{
+			if (!await _applicationRepository.ExistsRecipeAsync(recipeId) && await _applicationRepository.ExistsIngredienteAsync(ingredientId))
+			{
+				return NotFound();
+			}
+			var ingredient = await _applicationRepository.GetIngredientAsync(recipeId, ingredientId);
+			_mapper.Map(updateIngredientDTO, ingredient);
+			_applicationRepository.UpdateIngredientAsync(ingredient);
+			await _applicationRepository.SaveChangesAsync();
+			return NoContent();
+		}
+
+		[HttpPatch("{ingredientId}")]
+		public async Task<ActionResult<Ingredient>> UpdateRecipe(int recipeId, int ingredientId, JsonPatchDocument<UpdateIngredientDTO> patchDocument)
+		{
+			if (!await _applicationRepository.ExistsRecipeAsync(recipeId) && await _applicationRepository.ExistsIngredienteAsync(ingredientId))
+			{
+				return NotFound();
+			}
+			var ingredient = await _applicationRepository.GetIngredientAsync(recipeId, ingredientId);
+
+			var ingredientPatch = _mapper.Map<UpdateIngredientDTO>(ingredient);
+
+			patchDocument.ApplyTo(ingredientPatch, ModelState);
+
+			if (!TryValidateModel(ingredientPatch))
+			{
+				return ValidationProblem(ModelState);
+			}
+
+			_mapper.Map(ingredientPatch, ingredient);
+			_applicationRepository.UpdateIngredientAsync(ingredient);
+			await _applicationRepository.SaveChangesAsync();
+
+			return NoContent();
+		}
+		[HttpDelete("{ingredientId}")]
+		public async Task<ActionResult<Ingredient>> DeleteIngredient(int recipeId, int ingredientId)
+		{
+			if (!await _applicationRepository.ExistsIngredienteAsync(ingredientId))
+			{
+				return NotFound();
+			}
+			var recipe = await _applicationRepository.GetIngredientAsync(recipeId, ingredientId);
+			_applicationRepository.DeleteIngredientAsync(recipeId, recipe);
+			await _applicationRepository.SaveChangesAsync();
+			return NoContent();
 		}
 	}
 }

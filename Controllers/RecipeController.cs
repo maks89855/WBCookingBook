@@ -22,31 +22,39 @@ namespace WebCookingBook.Controllers
             this._mapper = mapper;
         }
         [HttpGet("{recipeId}", Name = "GetRecipe")]
-        //TODO: Добавить bool выражения для отображения ингредиентов
+        //TODO: Добавить bool выражения для отображения ингредиентов, шагов
         public async Task<ActionResult<RecipeDTO>> GetRecipe(int recipeId)
         {
             var recipe = await _applicationRepository.GetRecipeAsync(recipeId);
             if (recipe == null)
             {
                 return NotFound();
-            }         
+            }
             var recipefinnaly = _mapper.Map<RecipeDTO>(recipe);
-			var Ingredients = await _applicationRepository.GetIngredientsAsync(recipeId);
-			recipefinnaly.Ingredients = _mapper.Map<IEnumerable<IngredientDTO>>(Ingredients).ToList();
-			return Ok(recipefinnaly);
+            var category = await _applicationRepository.GetCategoryAsync(recipe.CategoryId);
+            var ingredients = await _applicationRepository.GetIngredientsAsync(recipeId);
+            var stepsCooking = await _applicationRepository.GetStepsRecipeAsync(recipeId);
+            recipefinnaly.Category = _mapper.Map<CategoryDTO>(category);
+            recipefinnaly.Ingredients = _mapper.Map<IEnumerable<IngredientDTO>>(ingredients).ToList();
+            recipefinnaly.StepsCooking = _mapper.Map<IEnumerable<StepCookingDTO>>(stepsCooking).ToList();
+            return Ok(recipefinnaly);
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetRecipesAsync(string? searchRecipe)
         {
-            var recipe = await _applicationRepository.GetRecipesAsync(searchRecipe);
-            if (recipe == null)
+            var recipes = await _applicationRepository.GetRecipesAsync(searchRecipe);
+            if (recipes == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<IEnumerable<RecipeDTO>>(recipe));
-        }      
+            foreach (var recipe in recipes)
+            {
+                recipe.Category = await _applicationRepository.GetCategoryAsync(recipe.CategoryId);
+            }
+            return Ok(_mapper.Map<IEnumerable<RecipeDTO>>(recipes));
+        }
 
-        [HttpPost]
+        [HttpPost("{categoryId}")]
         public async Task<ActionResult<Recipe>> AddRecipeAsync(int categoryId, CreateRecipeDTO createRecipeDTO)
         {
             if(!await _applicationRepository.ExistsCategoryAsync(categoryId)) return NotFound();
@@ -83,7 +91,7 @@ namespace WebCookingBook.Controllers
         }
 
         [HttpPatch("{recipeId}")]
-        public async Task<ActionResult<Category>> UpdateCategory(int recipeId, JsonPatchDocument<UpdateRecipeDTO> patchDocument)
+        public async Task<ActionResult<Recipe>> UpdateRecipe (int recipeId, JsonPatchDocument<UpdateRecipeDTO> patchDocument)
         {
             if(!await _applicationRepository.ExistsRecipeAsync(recipeId))
             {

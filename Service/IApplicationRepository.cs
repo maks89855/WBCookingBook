@@ -28,15 +28,24 @@ namespace WebCookingBook.Service
 		#endregion
 
 		#region Ingredient
-		Task<Ingredient> GetIngredientAsync(int IngredientId);
+		Task<Ingredient> GetIngredientAsync(int recipeId, int IngredientId);
 		Task<IEnumerable<Ingredient>> GetIngredientsAsync();
 		Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId);
 		Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId, string searchIngredient);
 		Task AddIngredientAsync(int recipeID, Ingredient Ingredient);
-		Task<bool> ExistsIngredienteAsync(int IngredientId);
+		Task<bool> ExistsIngredienteAsync(int ingredientId);
 		void UpdateIngredientAsync(Ingredient Ingredient);
-		void DeleteIngredientAsync(Ingredient Ingredient);
+		void DeleteIngredientAsync(int recipeId, Ingredient Ingredient);
 
-		#endregion
-	}
+        #endregion
+
+        #region StepCook
+        Task<StepCook> GetStepAsync(int recipeId,int stepId);
+        Task<IEnumerable<StepCook>> GetStepsRecipeAsync(int recipeId);
+        Task AddStepAsync(int stepId, StepCook step);
+        void UpdateStepAsync(StepCook step);
+        void DeleteStepAsync(StepCook step);
+
+        #endregion
+    }
 }

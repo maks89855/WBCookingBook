@@ -20,8 +20,8 @@ namespace WebCookingBook.Service
         {
             _context.Categories.Add(category);
         }
-
-		public async Task AddIngredientAsync(int recipeID, Ingredient Ingredient)
+        //TODO: Переделать под список ингредиентов
+        public async Task AddIngredientAsync(int recipeID, Ingredient Ingredient)
 		{
 			var recipe = await _context.Recipes.FirstOrDefaultAsync(c=>c.Id == recipeID);
             if(recipe != null)
@@ -39,14 +39,27 @@ namespace WebCookingBook.Service
 			}           
         }
 
+        public async Task AddStepAsync(int recipeId, StepCook step)
+        {
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(c=>c.Id==recipeId);
+            if(recipe != null)
+            {
+                recipe.StepsCooking.Add(step);
+            }
+        }
+
         public void DeleteCategoryAsync(Category category)
         {
             _context.Categories.Remove(category);
         }
 
-		public void DeleteIngredientAsync(Ingredient Ingredient)
+		public async void DeleteIngredientAsync(int recipeId, Ingredient Ingredient)
 		{
-			throw new NotImplementedException();
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(_ => _.Id == recipeId);
+            if(recipe != null)
+            {
+                recipe.Ingredients.Remove(Ingredient);
+            }
 		}
 
 		public void DeleteRecipeAsync(Recipe recipe)
@@ -54,14 +67,19 @@ namespace WebCookingBook.Service
             _context.Recipes.Remove(recipe);
         }
 
+        public void DeleteStepAsync(StepCook step)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> ExistsCategoryAsync(int categoryId)
         {
             return await _context.Categories.AnyAsync(c=>c.Id == categoryId);
         }
 
-		public Task<bool> ExistsIngredienteAsync(int IngredientId)
+		public async Task<bool> ExistsIngredienteAsync(int IngredientId)
 		{
-			throw new NotImplementedException();
+			return await _context.Ingredients.AnyAsync(c => c.Id == IngredientId);
 		}
 
 		public async Task<bool> ExistsRecipeAsync(int recipeId)
@@ -88,9 +106,9 @@ namespace WebCookingBook.Service
             return await _context.Categories.Where(c=>c.Id == categoryId).FirstOrDefaultAsync();
         }
 
-		public async Task<Ingredient> GetIngredientAsync(int IngredientId)
+		public async Task<Ingredient> GetIngredientAsync(int recipeId, int IngredientId)
 		{
-            return await _context.Ingredients.Where(c => c.Id == IngredientId).FirstOrDefaultAsync();
+            return await _context.Ingredients.Where(c =>c.RecipeId == recipeId && c.Id == IngredientId).FirstOrDefaultAsync();
 		}
 
 		public async Task<IEnumerable<Ingredient>> GetIngredientsAsync()
@@ -122,6 +140,18 @@ namespace WebCookingBook.Service
             seacrhRecipe = seacrhRecipe.Trim();
             return await _context.Recipes.Where(c => c.Name.Contains(seacrhRecipe)).ToListAsync();
         }
+
+        public async Task<StepCook> GetStepAsync(int recipeId, int stepId)
+        {
+            return await _context.StepCooks.Where(f=>f.RecipeId == recipeId && f.Id == stepId).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<StepCook>> GetStepsRecipeAsync(int recipeId)
+        {
+            return await _context.StepCooks.Where(f=>f.RecipeId==recipeId).ToListAsync();
+        }
+
+
         public async Task<bool> SaveChangesAsync()
         {
             return (_context.SaveChanges()>=0);
@@ -140,6 +170,11 @@ namespace WebCookingBook.Service
 		public void UpdateRecipeAsync(Recipe recipe)
         {
             
+        }
+
+        public void UpdateStepAsync(StepCook step)
+        {
+            throw new NotImplementedException();
         }
     }
 }

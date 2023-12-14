@@ -10,7 +10,6 @@ namespace WebCookingBook.Profiles
         public RecipeProfile()
         {
             CreateMap<CreateRecipeDTO, Recipe>();
-            CreateMap<CreateCategoryDTO, RecipeDTO>();
             CreateMap<Recipe, RecipeDTO>();
             CreateMap<RecipeDTO, Recipe>();
             CreateMap<UpdateRecipeDTO, Recipe>();

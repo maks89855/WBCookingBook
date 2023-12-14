@@ -8,11 +8,11 @@ namespace WebCookingBook.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } = 1;
+        public int Id { get; set; }
         //public Image Image { get; set; }
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
-        public int CategoryId { get; set; }
+        public int CategoryId { get; set; } = 1;
         [Required]
         [MaxLength(50, ErrorMessage = "Превышен лимит символов. Макс. кол-во 50 символов")]
         public string Name { get; set; }
