@@ -23,7 +23,7 @@ namespace WebCookingBook.API.Controllers
         [HttpGet("{stepId}",Name = "GetStep")]
         public async Task<ActionResult<StepCookingDTO>> GetStep(int recipeId, int stepId)
         {
-            var step = _applicationRepository.GetStepAsync(recipeId, stepId);
+            var step = await _applicationRepository.GetStepAsync(recipeId, stepId);
             if (step == null)
             {
                 return NotFound();
@@ -33,11 +33,11 @@ namespace WebCookingBook.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StepCookingDTO>>> GetSteps(int recipeId)
         {
-            var step = _applicationRepository.GetStepsRecipeAsync(recipeId);
+            var step =  await _applicationRepository.GetStepsRecipeAsync(recipeId);
             if (step == null)
             {
                 return NotFound();
-            }
+            }           
             return Ok(_mapper.Map<IEnumerable<StepCookingDTO>>(step));
         }
         [HttpPost]

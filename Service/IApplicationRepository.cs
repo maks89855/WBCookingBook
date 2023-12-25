@@ -32,7 +32,7 @@ namespace WebCookingBook.Service
 		Task<IEnumerable<Ingredient>> GetIngredientsAsync();
 		Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId);
 		Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId, string searchIngredient);
-		Task AddIngredientAsync(int recipeID, Ingredient Ingredient);
+		Task AddIngredientAsync(int recipeID, IEnumerable<Ingredient> Ingredient);
 		Task<bool> ExistsIngredienteAsync(int ingredientId);
 		void UpdateIngredientAsync(Ingredient Ingredient);
 		void DeleteIngredientAsync(int recipeId, Ingredient Ingredient);

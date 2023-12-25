@@ -9,9 +9,12 @@ namespace WebCookingBook.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
+		[Required]
+		public int NumberStep { get; set; }
 		public int RecipeId { get; set; }
 		[ForeignKey("RecipeId")]
 		public Recipe? Recipe { get; set; }
+		[Required]
 		public string Discription { get; set; }
 	}
 }

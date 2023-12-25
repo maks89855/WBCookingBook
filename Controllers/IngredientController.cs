@@ -53,23 +53,23 @@ namespace WebCookingBook.API.Controllers
 			}
 		}
 		[HttpPost]
-		public async Task<ActionResult<Ingredient>> AddIngredientAsync(int recipeId, CreateIngredientDTO createIngredientDTO)
+		public async Task<ActionResult<Ingredient>> AddIngredientAsync(int recipeId, IEnumerable<CreateIngredientDTO> createIngredientDTO)
 		{
-			if(! await _applicationRepository.ExistsRecipeAsync(recipeId)) return NotFound();
-			var ingredient = _mapper.Map<Ingredient>(createIngredientDTO);
-			await _applicationRepository.AddIngredientAsync(recipeId, ingredient);
+			if(! await _applicationRepository.ExistsRecipeAsync(recipeId)) return NotFound();			
+			var ingredients = _mapper.Map<IEnumerable<Ingredient>>(createIngredientDTO);
+			await _applicationRepository.AddIngredientAsync(recipeId, ingredients);
 			await _applicationRepository.SaveChangesAsync();
-			var ingredientFinnaly = _mapper.Map<IngredientDTO>(ingredient);
+			var ingredientFinnaly = _mapper.Map<IEnumerable<IngredientDTO>>(ingredients);
 			return CreatedAtRoute("GetIngredient", new
 			{
                 recipeId = recipeId,
-                ingredientId = ingredientFinnaly.Id
+                ingredientId = ingredientFinnaly.First().Id
 
 			}, ingredientFinnaly);
 		}
 
 		[HttpPut("{ingredientId}")]
-		public async Task<ActionResult<Ingredient>> UpdateRecipe(int recipeId, int ingredientId, UpdateIngredientDTO updateIngredientDTO)
+		public async Task<ActionResult<Ingredient>> UpdateIngredient(int recipeId, int ingredientId, UpdateIngredientDTO updateIngredientDTO)
 		{
 			if (!await _applicationRepository.ExistsRecipeAsync(recipeId) && await _applicationRepository.ExistsIngredienteAsync(ingredientId))
 			{
@@ -83,7 +83,7 @@ namespace WebCookingBook.API.Controllers
 		}
 
 		[HttpPatch("{ingredientId}")]
-		public async Task<ActionResult<Ingredient>> UpdateRecipe(int recipeId, int ingredientId, JsonPatchDocument<UpdateIngredientDTO> patchDocument)
+		public async Task<ActionResult<Ingredient>> UpdateIngredient(int recipeId, int ingredientId, JsonPatchDocument<UpdateIngredientDTO> patchDocument)
 		{
 			if (!await _applicationRepository.ExistsRecipeAsync(recipeId) && await _applicationRepository.ExistsIngredienteAsync(ingredientId))
 			{
@@ -106,7 +106,8 @@ namespace WebCookingBook.API.Controllers
 
 			return NoContent();
 		}
-		[HttpDelete("{ingredientId}")]
+        //TODO: https://stackoverflow.com/questions/21863326/delete-multiple-records-using-rest
+        [HttpDelete("{ingredientId}")]
 		public async Task<ActionResult<Ingredient>> DeleteIngredient(int recipeId, int ingredientId)
 		{
 			if (!await _applicationRepository.ExistsIngredienteAsync(ingredientId))

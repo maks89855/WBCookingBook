@@ -21,12 +21,15 @@ namespace WebCookingBook.Service
             _context.Categories.Add(category);
         }
         //TODO: Переделать под список ингредиентов
-        public async Task AddIngredientAsync(int recipeID, Ingredient Ingredient)
+        public async Task AddIngredientAsync(int recipeID, IEnumerable<Ingredient> Ingredients)
 		{
 			var recipe = await _context.Recipes.FirstOrDefaultAsync(c=>c.Id == recipeID);
-            if(recipe != null)
+            if (recipe != null)
             {
-                recipe.Ingredients.Add(Ingredient);
+                foreach(var ingredient in Ingredients)
+                {
+                    recipe.Ingredients.Add(ingredient);
+                }
             }
 		}
 
@@ -128,7 +131,7 @@ namespace WebCookingBook.Service
 
 		public async Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId)
 		{
-            return await _context.Ingredients.Where(c => c.RecipeId == recipeId).ToListAsync();
+            return await _context.Ingredients.Where(c => c.RecipeId == recipeId).OrderBy(item=>item.NameIngredient).ToListAsync();
 		}
 
 		public Task<IEnumerable<Ingredient>> GetIngredientsAsync(int recipeId, string searchIngredient)
@@ -148,22 +151,34 @@ namespace WebCookingBook.Service
         {
             if (string.IsNullOrWhiteSpace(seacrhRecipe)) return await GetRecipesAsync();
             seacrhRecipe = seacrhRecipe.Trim();
-            return await _context.Recipes.Where(c => c.Name.Contains(seacrhRecipe)).ToListAsync();
+            return 
+                await _context.Recipes.
+                Where(c => c.Name.Contains(seacrhRecipe)).
+                ToListAsync();
         }
 
         public async Task<StepCook> GetStepAsync(int recipeId, int stepId)
         {
-            return await _context.StepCooks.Where(f=>f.RecipeId == recipeId && f.Id == stepId).FirstOrDefaultAsync();
+            return await _context.StepCooks.
+                Where(f=>f.RecipeId == recipeId && f.Id == stepId).
+                FirstOrDefaultAsync();
         }
         public async Task<IEnumerable<StepCook>> GetStepsRecipeAsync(int recipeId)
         {
-            return await _context.StepCooks.Where(f=>f.RecipeId==recipeId).ToListAsync();
+            return 
+                await _context.StepCooks.
+                Where(f=>f.RecipeId==recipeId).
+                OrderBy(item=>item.NumberStep).
+                ToListAsync();
         }
         public async Task<IEnumerable<Recipe>> GetRecipesAsync(int categoryId,string seacrhRecipe)
         {
             if (string.IsNullOrWhiteSpace(seacrhRecipe)) return await GetRecipesAsync();
             seacrhRecipe = seacrhRecipe.Trim();
-            return await _context.Recipes.Where(c => c.CategoryId == categoryId && c.Name.Contains(seacrhRecipe)).ToListAsync();
+            return 
+                await _context.Recipes.
+                Where(c => c.CategoryId == categoryId && c.Name.Contains(seacrhRecipe)).
+                ToListAsync();
         }
         public async Task<bool> SaveChangesAsync()
         {
