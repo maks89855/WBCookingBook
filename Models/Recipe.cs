@@ -9,7 +9,7 @@ namespace WebCookingBook.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        //public Image Image { get; set; }
+        public string? Image { get; set; }
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
         public int CategoryId { get; set; } = 1;
