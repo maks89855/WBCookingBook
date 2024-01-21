@@ -1,7 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
+using WebCookingBook.API.Service;
 using WebCookingBook.DbContexts;
 using WebCookingBook.Service;
 
@@ -23,6 +25,7 @@ builder.Services.AddDbContext<ApplicationContext>(opt =>
 });
 
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen();
 
@@ -49,8 +52,8 @@ else
 app.UseRouting(); //   
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseEndpoints(endpoints => endpoints.MapControllers()); 
-
+app.UseEndpoints(endpoints => endpoints.MapControllers());
+app.UseStaticFiles();
 
 //app.MapControllers(); 
 

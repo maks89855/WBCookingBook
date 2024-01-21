@@ -1,17 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using WebCookingBook.API.Models;
+using WebCookingBook.API.Service;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
 
 namespace WebCookingBook.API.DTOModels
 {
+	[ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
 	public class CreateIngredientDTO
 	{
 		[Required]
-		public string NameIngredient { get; set; }
+		public string NameIngredient { get; set; } = "Название";
 		[Required]
-		public int Count { get; set; }
+		public int Count { get; set; } = 1;
 		[Required]
-		public Unit Units { get; set; }
+		public Unit Units { get; set; } = Unit.кг;
 	}
 }

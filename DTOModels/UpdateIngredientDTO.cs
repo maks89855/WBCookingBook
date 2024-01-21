@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebCookingBook.API.Models;
+using WebCookingBook.API.Service;
 using WebCookingBook.Models;
 
 namespace WebCookingBook.API.DTOModels
 {
+	[ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
 	public class UpdateIngredientDTO
 	{
 		[Required]

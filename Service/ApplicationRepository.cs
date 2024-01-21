@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebCookingBook.API.Service;
 using WebCookingBook.DbContexts;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
@@ -11,7 +12,7 @@ namespace WebCookingBook.Service
     {
         private readonly ApplicationContext _context;
 
-        public ApplicationRepository(ApplicationContext context) 
+		public ApplicationRepository(ApplicationContext context) 
         {
             this._context = context;
         }

@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WebCookingBook.API.DTOModels;
+using WebCookingBook.API.Service;
 using WebCookingBook.DTOModels;
 using WebCookingBook.Models;
 using WebCookingBook.Service;
@@ -14,12 +16,14 @@ namespace WebCookingBook.Controllers
     public class RecipeController : ControllerBase
     {
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IImageRepository _imageRepository;
         private readonly IMapper _mapper;
 
-        public RecipeController(IApplicationRepository applicationRepository, IMapper mapper)
+        public RecipeController(IApplicationRepository applicationRepository,IImageRepository imageRepository, IMapper mapper)
         {
             this._applicationRepository = applicationRepository;
             this._mapper = mapper;
+            this._imageRepository = imageRepository;
         }
         [HttpGet("{recipeId}", Name = "GetRecipe")]
         //TODO: Добавить bool выражения для отображения ингредиентов, шагов
@@ -54,14 +58,17 @@ namespace WebCookingBook.Controllers
             return Ok(_mapper.Map<IEnumerable<RecipeDTO>>(recipes));
         }
 
+
         [HttpPost("{categoryId}")]
-        public async Task<ActionResult<Recipe>> AddRecipeAsync(int categoryId, CreateRecipeDTO createRecipeDTO)
+		public async Task<ActionResult<RecipeDTO>> AddRecipeAsync(int categoryId, [FromForm]CreateRecipeDTO createRecipeDTO)
         {
             if(!await _applicationRepository.ExistsCategoryAsync(categoryId)) return NotFound();
             var recipe = _mapper.Map<Recipe>(createRecipeDTO);
             await _applicationRepository.AddRecipeAsync(categoryId, recipe);
-            await _applicationRepository.SaveChangesAsync();
-            var recipeFinnaly = _mapper.Map<RecipeDTO>(recipe);
+			await _applicationRepository.SaveChangesAsync();
+			recipe.Image = await _imageRepository.Upload(createRecipeDTO.Image, $"{recipe.Id}");
+			await _applicationRepository.SaveChangesAsync();
+			var recipeFinnaly = _mapper.Map<RecipeDTO>(recipe);
             return CreatedAtRoute("GetRecipe", new
             {              
                 recipeId = recipeFinnaly.Id
@@ -69,7 +76,8 @@ namespace WebCookingBook.Controllers
             }, recipeFinnaly);
         }
 
-        [HttpOptions]
+
+		[HttpOptions]
         public IActionResult GetRecipeOptions()
         {
             Response.Headers.Add("Allow", "GET, POST");
@@ -77,7 +85,7 @@ namespace WebCookingBook.Controllers
         }
 
         [HttpPut("{recipeId}")]
-        public async Task<ActionResult<Recipe>> UpdateRecipe(int recipeId, UpdateRecipeDTO updateRecipeDTO)
+        public async Task<ActionResult<Recipe>> UpdateRecipe(int recipeId, [FromForm]UpdateRecipeDTO updateRecipeDTO)
         {
             if(!await _applicationRepository.ExistsRecipeAsync(recipeId))
             {
@@ -85,6 +93,7 @@ namespace WebCookingBook.Controllers
             }         
             var recipe = await _applicationRepository.GetRecipeAsync(recipeId);
             _mapper.Map(updateRecipeDTO, recipe);
+            recipe.Image = await _imageRepository.Upload(updateRecipeDTO.Image, $"{recipeId}");
             _applicationRepository.UpdateRecipeAsync(recipe);
             await _applicationRepository.SaveChangesAsync();
             return NoContent();
@@ -109,7 +118,6 @@ namespace WebCookingBook.Controllers
             }
 
             _mapper.Map(recipePatch, recipe);
-
             _applicationRepository.UpdateRecipeAsync(recipe);
             await _applicationRepository.SaveChangesAsync();
 
