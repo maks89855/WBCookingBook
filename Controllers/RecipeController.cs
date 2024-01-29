@@ -53,7 +53,11 @@ namespace WebCookingBook.Controllers
             }
             foreach (var recipe in recipes)
             {
+                var ingredients = await _applicationRepository.GetIngredientsAsync(recipe.Id);
+                var stepsCooking = await _applicationRepository.GetStepsRecipeAsync(recipe.Id);
                 recipe.Category = await _applicationRepository.GetCategoryAsync(recipe.CategoryId);
+                recipe.Ingredients = _mapper.Map<IEnumerable<Ingredient>>(ingredients).ToList();
+                recipe.StepsCooking = _mapper.Map<IEnumerable<StepCook>>(stepsCooking).ToList();
             }
             return Ok(_mapper.Map<IEnumerable<RecipeDTO>>(recipes));
         }

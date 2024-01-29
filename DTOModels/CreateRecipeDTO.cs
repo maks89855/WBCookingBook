@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using WebCookingBook.Models;
 using WebCookingBook.API.DTOModels;
 using Microsoft.AspNetCore.Mvc;
+using WebCookingBook.API.Service;
 
 namespace WebCookingBook.DTOModels
 {
@@ -13,7 +14,7 @@ namespace WebCookingBook.DTOModels
 		public string Name { get; set; }
         public IFormFile? Image { get; set; }
 		public string? Description { get; set; }
-		public ICollection<CreateIngredientDTO> Ingredients { get; set; } = new List<CreateIngredientDTO>();
-		public ICollection<CreateStepDTO> StepsCooking { get; set; } = new List<CreateStepDTO>();
+        public ICollection<CreateIngredientDTO> Ingredients { get; set; } = new List<CreateIngredientDTO>();
+        public ICollection<CreateStepDTO> StepsCooking { get; set; } = new List<CreateStepDTO>();
     }
 }

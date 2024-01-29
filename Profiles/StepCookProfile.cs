@@ -12,8 +12,8 @@ namespace WebCookingBook.API.Profiles
             CreateMap<CreateStepDTO, StepCook>();
             CreateMap<StepCook, StepCookingDTO>();
             CreateMap<StepCookingDTO, StepCook>();
-            //CreateMap<UpdateRecipeDTO, StepCook>();
-            //CreateMap<StepCook, UpdateRecipeDTO>();
+            CreateMap<UpdateStepDTO, StepCook>();
+            CreateMap<StepCook, UpdateStepDTO>();
         }
     }
 }

@@ -100,6 +100,10 @@ namespace WebCookingBook.Service
         {
             return await _context.Recipes.AnyAsync(c=> c.CategoryId == categoryId && c.Id == recipeId);
         }
+        public async Task<bool> ExistsStepAsync(int stepId)
+        {
+            return await _context.StepCooks.AnyAsync(c=>c.Id==stepId);
+        }
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync(string searchCategory)
         {

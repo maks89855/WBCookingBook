@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using WebCookingBook.API.Service;
-using WebCookingBook.Models;
 
 namespace WebCookingBook.API.DTOModels
 {
-	[ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
-	public class CreateStepDTO
+    [ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
+    public class UpdateStepDTO
     {
         [Required]
         public int NumberStep { get; set; }

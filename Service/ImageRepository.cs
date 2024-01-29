@@ -7,7 +7,6 @@ namespace WebCookingBook.API.Service
     public class ImageRepository : IImageRepository
     {
         private readonly IWebHostEnvironment _environment;
-        private IFormFile _file;
         public ImageRepository(IWebHostEnvironment environment)
         {
             _environment = environment;
@@ -42,5 +41,18 @@ namespace WebCookingBook.API.Service
             }
             return idImage.ToString()+".jpg";        
         }
-    }
+		public async Task<string> Upload(IFormFile file, string subPath, string name)
+		{			
+			var path = _environment.WebRootPath + $"/images/{subPath}";
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+			using (var stream = new FileStream(path + $"/{name}.jpg", FileMode.Create))
+			{
+				await file.CopyToAsync(stream);
+			}
+			return name + ".jpg";
+		}
+	}
 }

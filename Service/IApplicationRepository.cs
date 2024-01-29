@@ -42,6 +42,7 @@ namespace WebCookingBook.Service
         Task<StepCook> GetStepAsync(int recipeId,int stepId);
         Task<IEnumerable<StepCook>> GetStepsRecipeAsync(int recipeId);
         Task AddStepAsync(int stepId, StepCook step);
+        Task<bool> ExistsStepAsync(int stepId);
         void UpdateStepAsync(StepCook step);
         void DeleteStepAsync(StepCook step);
 
