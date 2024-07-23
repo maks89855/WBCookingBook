@@ -12,7 +12,7 @@ namespace WebCookingBook.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DefaultValue("main_default.jpg")]
-        public string? Image { get; set; }
+        public string? Image { get; set; } = "main_default.jpg";
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
         public int CategoryId { get; set; } = 1;
@@ -26,6 +26,7 @@ namespace WebCookingBook.Models
 
         public Recipe()
         {
+            this.Image = "main_default.jpg";
             this.Name = "Рецепт";
 
 		}

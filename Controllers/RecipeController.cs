@@ -70,8 +70,11 @@ namespace WebCookingBook.Controllers
             var recipe = _mapper.Map<Recipe>(createRecipeDTO);
             await _applicationRepository.AddRecipeAsync(categoryId, recipe);
 			await _applicationRepository.SaveChangesAsync();
-			recipe.Image = await _imageRepository.Upload(createRecipeDTO.Image, $"{recipe.Id}");
-			await _applicationRepository.SaveChangesAsync();
+            if(createRecipeDTO.Image != null)
+            {
+                recipe.Image = await _imageRepository.Upload(createRecipeDTO.Image, $"{recipe.Id}");
+                await _applicationRepository.SaveChangesAsync();
+            }			
 			var recipeFinnaly = _mapper.Map<RecipeDTO>(recipe);
             return CreatedAtRoute("GetRecipe", new
             {              

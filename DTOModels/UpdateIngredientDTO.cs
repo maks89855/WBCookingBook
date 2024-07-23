@@ -7,7 +7,6 @@ using WebCookingBook.Models;
 
 namespace WebCookingBook.API.DTOModels
 {
-    [ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
     public class UpdateIngredientDTO
 	{
 		[Required]

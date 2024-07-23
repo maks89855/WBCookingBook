@@ -6,12 +6,10 @@ using WebCookingBook.Models;
 
 namespace WebCookingBook.API.DTOModels
 {
-	[ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
-	public class CreateStepDTO
+    //[ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
+    public class CreateStepDTO
     {
-        [Required]
         public int NumberStep { get; set; }
-        [Required]
         public string Discription { get; set; }
     }
 }

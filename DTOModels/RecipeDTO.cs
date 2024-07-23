@@ -14,9 +14,9 @@ namespace WebCookingBook.DTOModels
         [Required]
         [MaxLength(50, ErrorMessage = "Превышен лимит символов. Макс. кол-во 50 символов")]
         public string Name { get; set; } = "Рецепт";
-        public string? Image { get; set; }
+        public string? Image { get; set; } = "main_default.jpg";
 
-		public string? Description { get; set; }
+        public string? Description { get; set; }
 		public ICollection<IngredientDTO>? Ingredients { get; set; } = new List<IngredientDTO>();
 		public ICollection<StepCookingDTO>? StepsCooking { get; set; } = new List<StepCookingDTO>();
 

@@ -7,8 +7,9 @@ using WebCookingBook.Models;
 
 namespace WebCookingBook.API.DTOModels
 {
-	[ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
-	public class CreateIngredientDTO
+    //[ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
+    [ModelBinder(BinderType = typeof(TypeBinder))]
+    public class CreateIngredientDTO
 	{
 		[Required]
 		public string NameIngredient { get; set; } = "Название";

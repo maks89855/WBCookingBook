@@ -4,7 +4,6 @@ using WebCookingBook.API.Service;
 
 namespace WebCookingBook.API.DTOModels
 {
-    [ModelBinder(BinderType = typeof(MetadataValueModelBinder))]
     public class UpdateStepDTO
     {
         [Required]

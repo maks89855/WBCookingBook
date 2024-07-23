@@ -14,7 +14,7 @@ namespace WebCookingBook.DTOModels
 		public string Name { get; set; }
         public IFormFile? Image { get; set; }
 		public string? Description { get; set; }
-        public ICollection<CreateIngredientDTO> Ingredients { get; set; } = new List<CreateIngredientDTO>();
-        public ICollection<CreateStepDTO> StepsCooking { get; set; } = new List<CreateStepDTO>();
+        public List<CreateIngredientDTO>? Ingredients { get; set; } = new List<CreateIngredientDTO>();
+        public List<CreateStepDTO>? StepsCooking { get; set; } = new List<CreateStepDTO>();
     }
 }
