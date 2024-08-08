@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCookingBook.API", "WebCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCookingBook.Test", "..\WebCookingBook.Test\WebCookingBook.Test.csproj", "{15B3CF87-5C52-47B6-87D0-3BCEB7BCBCAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCookingBook.Frontend", "..\WebApplication2\WebCookingBook.Frontend.csproj", "{F3E7A8DF-DF96-4CE8-ABBB-846760F943A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCookingBook.Frontend", "..\WebApplication2\WebCookingBook.Frontend.csproj", "{F3E7A8DF-DF96-4CE8-ABBB-846760F943A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebCookingBook.API", "WebCookingBook.API", "{FE54C958-AF4F-47EC-B385-6BE98FA370FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebCookingBook.Frontend", "WebCookingBook.Frontend", "{4F6A7A0C-D31F-46AA-8213-AD7E5D0B3319}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +34,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{62677C43-D9EA-4A11-83DF-A16605F1CBAA} = {FE54C958-AF4F-47EC-B385-6BE98FA370FD}
+		{F3E7A8DF-DF96-4CE8-ABBB-846760F943A3} = {4F6A7A0C-D31F-46AA-8213-AD7E5D0B3319}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A11AD7C2-576E-4253-BB91-8E4B237BF169}
